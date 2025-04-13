@@ -1,0 +1,120 @@
+basePath: /
+definitions:
+  dto.Duration:
+    properties:
+      days:
+        description: Días, mínimo 0
+        minimum: 0
+        type: integer
+      hours:
+        description: Horas, mínimo 0
+        minimum: 0
+        type: integer
+      minutes:
+        description: Minutos, mínimo 0
+        minimum: 0
+        type: integer
+    type: object
+  dto.QRRequest:
+    properties:
+      expires_in:
+        $ref: '#/definitions/dto.Duration'
+      text:
+        type: string
+    required:
+    - expires_in
+    - text
+    type: object
+  dto.QRResponse:
+    properties:
+      created_at:
+        type: string
+      download_count:
+        type: integer
+      expires_at:
+        type: string
+      format:
+        type: string
+      id:
+        type: string
+      last_downloaded:
+        type: string
+      size:
+        type: integer
+      text:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: jheovany.menjivarg@gmail.com
+    name: Soporte Nebula QR
+  description: API para generar y recuperar códigos QR.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://example.com/terms/
+  title: Nebula QR API
+  version: "0.1"
+paths:
+  /qr:
+    post:
+      consumes:
+      - application/json
+      description: Genera un código QR con el texto proporcionado y la la duracion
+        por lo menos a un minuto en el futuro.
+      parameters:
+      - description: Datos para generar el QR
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.QRRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.QRResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Genera un código QR
+      tags:
+      - QR
+  /qr/{id}:
+    get:
+      description: Retorna la imagen del código QR correspondiente al ID proporcionado.
+      parameters:
+      - description: ID del código QR
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Obtiene un código QR
+      tags:
+      - QR
+swagger: "2.0"

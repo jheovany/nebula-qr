@@ -1,0 +1,177 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API para generar y recuperar códigos QR.",
+        "title": "Nebula QR API",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "Soporte Nebula QR",
+            "email": "jheovany.menjivarg@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "0.1"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/qr": {
+            "post": {
+                "description": "Genera un código QR con el texto proporcionado y la la duracion por lo menos a un minuto en el futuro.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QR"
+                ],
+                "summary": "Genera un código QR",
+                "parameters": [
+                    {
+                        "description": "Datos para generar el QR",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.QRRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.QRResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/qr/{id}": {
+            "get": {
+                "description": "Retorna la imagen del código QR correspondiente al ID proporcionado.",
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "QR"
+                ],
+                "summary": "Obtiene un código QR",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID del código QR",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.Duration": {
+            "type": "object",
+            "properties": {
+                "days": {
+                    "description": "Días, mínimo 0",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "hours": {
+                    "description": "Horas, mínimo 0",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "minutes": {
+                    "description": "Minutos, mínimo 0",
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        },
+        "dto.QRRequest": {
+            "type": "object",
+            "required": [
+                "expires_in",
+                "text"
+            ],
+            "properties": {
+                "expires_in": {
+                    "$ref": "#/definitions/dto.Duration"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.QRResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "download_count": {
+                    "type": "integer"
+                },
+                "expires_at": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_downloaded": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

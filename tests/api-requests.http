@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:8080
+
+### Crear un código QR
+POST {{baseUrl}}/qr
+Content-Type: application/json
+
+{
+  "text": "https://myawsomesite.com",
+  "expires_in": "DosHoras"
+}
+
+### Guardar la respuesta para usar el ID
+# @name createQR
+POST {{baseUrl}}/qr
+Content-Type: application/json
+
+{
+  "text": "https://myawsomesite.com",
+  "expires_in": "2h45m"
+}
+
+### Obtener el QR creado (usando el ID de la respuesta anterior)
+GET {{baseUrl}}/qr/{{createQR.response.body.id}}
+
+### Probar un QR inexistente
+GET {{baseUrl}}/qr/507f1f77bcf86cd799439011
