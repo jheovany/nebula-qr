@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"nebula-qr/docs"
 	"nebula-qr/internal/handlers"
 	"nebula-qr/internal/services"
 	"nebula-qr/pkg/database"
@@ -18,6 +19,16 @@ func main() {
 			log.Fatal("Error cargando archivo .env")
 		}
 	}
+
+	// Configurar Swagger dinámicamente
+    host := os.Getenv("SWAGGER_HOST")
+	schemas := []string{"https"}
+    if host == "" {
+        host = "localhost:8080" // Valor por defecto para desarrollo
+		schemas = []string{"http"} // Usar HTTP en desarrollo
+    }
+    docs.SwaggerInfo.Host = host
+    docs.SwaggerInfo.Schemes = schemas // Usar HTTPS en producción
 
 	mongoURI := os.Getenv("MONGODB_URI")
 	if mongoURI == "" {

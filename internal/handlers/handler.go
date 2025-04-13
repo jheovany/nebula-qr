@@ -27,7 +27,7 @@ type QRHandler struct {
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 
-// @host localhost:8080
+// @host https://nebula-qr.onrender.com/
 // @BasePath /
 func RegisterQRHandlers(router *gin.Engine, service *services.QRService) {
 	handler := &QRHandler{
